@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}- Calendar{% endblock %}
+{% block content %}
+{% if enrollments %}
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-8">
+      <form action="/calendar" method="POST">
+        <div class="form-group">
+          <label for="Course">Course</label>
+          <select class="form-control" id="Course" name="Course">
+          {% for enrollment in enrollments %}
+            <option value="{{ enrollment.id }}">{{ enrollment.name }} - {{ enrollment.startDate }}</option>
+          {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" name="academicCheck">
+            <label class="form-check-label" for="academicCheck">
+              Academic Calendar
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" name="careerCheck">
+            <label class="form-check-label" for="careerCheck">
+              Career Calendar
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" name="assignmentsCheck">
+            <label class="form-check-label" for="assignmentsCheck">
+              Assignments Calendar
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" name="officeHoursCheck">
+            <label class="form-check-label" for="officeHoursCheck">
+            Include Office Hours
+          </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate Calendars</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-12">
+      <h4>
+        Click buttons below to download your calendar files
+      </h4>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-12">
+{% for file in fileList %}
+      <div>
+        <a href='files/{{ file }}'><button type="button" class="btn btn-primary">&#8595; {{ file }}</button></a>
+      </div>
+{% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
