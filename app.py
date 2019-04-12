@@ -17,11 +17,16 @@ def welcome():
 def login():
     # if form is posted
     if request.method == 'POST':
+        error = ''
         user_detail = get_token(request.form['Email'],
                                 request.form['Password'])
-        session['token'] = user_detail['authenticationInfo']['authToken']
-        session['user_id'] = user_detail['authenticationInfo']['userId']
-        return redirect(url_for('calendar'))
+        if user_detail['errorCode'] is None:
+            session['token'] = user_detail['authenticationInfo']['authToken']
+            session['user_id'] = user_detail['authenticationInfo']['userId']
+            return redirect(url_for('calendar'))
+        else:
+            error = 'Authentication Issue\nPlease check your credentials and try again.'
+            return render_template('login.html', error=error)
 
     # get request
     else:
