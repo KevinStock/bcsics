@@ -26,7 +26,7 @@ def login():
     # get request
     else:
         # check if we already have a token
-        if 'token' in session:
+        if is_logged_in():
             return redirect(url_for('calendar'))
         return render_template('login.html')
 
@@ -36,7 +36,7 @@ def calendar():
     # get request
     if request.method == 'GET':
         # check if user is logged in
-        if session.get('token') is not None:
+        if is_logged_in():
             # get session enrollments
             user_detail = get_user_detail(session['token'])
             enrollments = []
@@ -141,6 +141,12 @@ def logout():
     session.pop('token', None)
     session.pop('user_id', None)
     return redirect(url_for('welcome'))
+
+
+def is_logged_in():
+    if 'token' in session:
+        return True
+    return False
 
 
 if __name__ == '__name__':
