@@ -104,8 +104,8 @@ def calendar():
             e = Event()
             if assignment['context']['id'] == 1:
                 e.name = assignment['title']
-                e.begin = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ')
-                e.end = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ')
+                e.begin = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days = 1)
+                e.end = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days = 1)
                 e.make_all_day()
                 assignmentCalendar.events.add(e)
                 assignmentList.append({'title': assignment['title'],

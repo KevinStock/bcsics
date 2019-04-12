@@ -1,6 +1,6 @@
 import requests
 import json
-import datetime
+from datetime import datetime, timedelta
 
 
 # Login
@@ -87,3 +87,7 @@ def get_enrollments(token):
                                  'startDate': datetime.strptime(enrollment['course']['startDate'],
                                                                 '%Y-%m-%dT%H:%M:%SZ').strftime("%B %d, %Y") })
     return enrollments
+
+def create_calenar(token, enrollmentID, calType):
+
+    return
