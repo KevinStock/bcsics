@@ -25,7 +25,7 @@ def login():
     # POST request
     else:
         user_detail = apiFunctions.get_token(request.form['Email'],
-                                request.form['Password'])
+                                             request.form['Password'])
         if user_detail['errorCode'] is None:
             session['token'] = user_detail['authenticationInfo']['authToken']
             session['user_id'] = user_detail['authenticationInfo']['userId']
@@ -81,4 +81,4 @@ def is_logged_in():
 
 
 if __name__ == '__name__':
-  app.run(debug=True, port=3000)
+    app.run(debug=True, port=3000)
