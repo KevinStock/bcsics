@@ -1,6 +1,7 @@
 import requests
 import json
 from datetime import datetime, timedelta
+from ics import Calendar, Event
 
 
 # Login
@@ -88,6 +89,58 @@ def get_enrollments(token):
                                                                 '%Y-%m-%dT%H:%M:%SZ').strftime("%B %d, %Y") })
     return enrollments
 
-def create_calenar(token, enrollmentID, calType):
 
-    return
+def create_calendar(token, enrollment_id, options):
+    file_list = []
+    if options['academicCal'] or options['careerCal']:
+        academic_calendar = Calendar()
+        career_calendar = Calendar()
+        for sess in get_sessions(token, enrollment_id)['calendarSessions']:
+            e = Event()
+            if (sess['context']['id'] == 1) and options['academicCal']:
+                start_time = datetime.strptime(sess['session']['startTime'], '%Y-%m-%dT%H:%M:%SZ')
+                end_time = datetime.strptime(sess['session']['endTime'], '%Y-%m-%dT%H:%M:%SZ')
+                e.name = str(sess['session']['chapter']) + ': ' + sess['session']['name']
+                if options['officeHours']:
+                    e.begin = start_time - timedelta(minutes=45)
+                    e.end = end_time + timedelta(minutes=30)
+                else:
+                    e.begin = start_time
+                    e.end = end_time
+                academic_calendar.events.add(e)
+
+            elif (sess['context']['id'] == 2) and options['careerCal']:
+                e.name = sess['session']['name']
+                e.begin = sess['session']['startTime']
+                e.end = sess['session']['endTime']
+                career_calendar.events.add(e)
+
+        if len(academic_calendar.events) > 0:
+            academic_file_name = str(enrollment_id) + '-academic-calendar'
+            academic_file_name = academic_file_name + '-oh.ics' if options['officeHours'] else academic_file_name + '.ics'
+            file_list.append(academic_file_name)
+            with open('files/' + academic_file_name, 'w') as f:
+                f.writelines(academic_calendar)
+
+        if len(career_calendar.events) > 0:
+            career_file_name = str(enrollment_id) + '-career-calendar.ics'
+            file_list.append(career_file_name)
+            with open('files/' + career_file_name, 'w') as f:
+                f.writelines(career_calendar)
+
+    if options['assignmentCal']:
+        assignment_calendar = Calendar()
+        for assignment in get_assignments(token, enrollment_id)['calendarAssignments']:
+            e = Event()
+            if assignment['context']['id'] == 1:
+                e.name = assignment['title']
+                e.begin = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
+                e.end = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
+                e.make_all_day()
+                assignment_calendar.events.add(e)
+        assignment_file_name = str(enrollment_id) + '-assignment-calendar.ics'
+        file_list.append(assignment_file_name)
+        with open('files/' + assignment_file_name, 'w') as f:
+            f.writelines(assignment_calendar)
+
+    return file_list
