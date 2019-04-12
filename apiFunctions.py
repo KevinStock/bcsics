@@ -1,5 +1,7 @@
 import requests
 import json
+import datetime
+
 
 # Login
 # POST https://bootcampspot.com/api/instructor/v1/login
@@ -19,6 +21,7 @@ def get_token(email, password):
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
+
 # Me
 # POST https://bootcampspot.com/api/instructor/v1/me
 def get_user_detail(token):
@@ -33,6 +36,7 @@ def get_user_detail(token):
         return response.json()
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
+
 
 # Sessions
 # POST https://bootcampspot.com/api/instructor/v1/sessions
@@ -52,6 +56,7 @@ def get_sessions(token, enrollmentId):
   except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
+
 # Assignments
 # POST https://bootcampspot.com/api/instructor/v1/assignments
 def get_assignments(token, enrollmentId):
@@ -69,3 +74,16 @@ def get_assignments(token, enrollmentId):
       return response.json()
   except requests.exceptions.RequestException:
       print('HTTP Request failed')
+
+
+def get_enrollments(token):
+    # get session enrollments
+    user_detail = get_user_detail(token)
+    enrollments = []
+    for enrollment in get_user_detail(token)['enrollments']:
+        if enrollment['active']:
+            enrollments.append({ 'id': enrollment['id'],
+                                 'name': enrollment['course']['name'],
+                                 'startDate': datetime.strptime(enrollment['course']['startDate'],
+                                                                '%Y-%m-%dT%H:%M:%SZ').strftime("%B %d, %Y") })
+    return enrollments

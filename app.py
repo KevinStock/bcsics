@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, request, send_file
-from apiFunctions import get_token, get_user_detail, get_sessions, get_assignments
+import apiFunctions
 from datetime import datetime, timedelta
 from ics import Calendar, Event
 import os
@@ -17,16 +17,16 @@ def welcome():
 def login():
     # if form is posted
     if request.method == 'POST':
-        error = ''
-        user_detail = get_token(request.form['Email'],
+        user_detail = apiFunctions.get_token(request.form['Email'],
                                 request.form['Password'])
         if user_detail['errorCode'] is None:
             session['token'] = user_detail['authenticationInfo']['authToken']
             session['user_id'] = user_detail['authenticationInfo']['userId']
             return redirect(url_for('calendar'))
         else:
-            error = 'Authentication Issue\nPlease check your credentials and try again.'
-            return render_template('login.html', error=error)
+            return render_template('login.html',
+                                   error='Authentication Issue. Please check your credentials and try again.',
+                                   email=request.form['Email'])
 
     # get request
     else:
@@ -38,21 +38,16 @@ def login():
 # calendar page
 @app.route('/calendar', methods=['GET', 'POST'])
 def calendar():
-    # get request
+    # GET request
     if request.method == 'GET':
         # check if user is logged in
         if is_logged_in():
-            # get session enrollments
-            user_detail = get_user_detail(session['token'])
-            enrollments = []
-            for enrollment in user_detail['enrollments']:
-                if enrollment['active']:
-                    enrollments.append({'id': enrollment['id'],
-                                        'name': enrollment['course']['name'],
-                                        'startDate': datetime.strptime(enrollment['course']['startDate'], '%Y-%m-%dT%H:%M:%SZ').strftime("%B %d, %Y")})
+            enrollments = apiFunctions.get_enrollments(session['token'])
             return render_template('calendar.html', enrollments=enrollments)
         else:
             return redirect(url_for('login'))
+
+    # POST request
     else:
         academicCheck = False
         careerCheck = False
@@ -69,7 +64,7 @@ def calendar():
         if request.form.get('assignmentsCheck'):
             assignmentsCheck = True
 
-        sessions = get_sessions(session['token'], enrollmentID)
+        sessions = apiFunctions.get_sessions(session['token'], enrollmentID)
         academicCalendar = Calendar()
         academicSessions = []
         careerCalendar = Calendar()
@@ -78,7 +73,7 @@ def calendar():
         assignmentList = []
 
     if academicCheck or careerCheck:
-        for sess in get_sessions(session['token'], enrollmentID)['calendarSessions']:
+        for sess in apiFunctions.get_sessions(session['token'], enrollmentID)['calendarSessions']:
             e = Event()
             if (sess['context']['id'] == 1) and academicCheck:
                 start_time = datetime.strptime(sess['session']['startTime'], '%Y-%m-%dT%H:%M:%SZ')
@@ -105,7 +100,7 @@ def calendar():
                                        'end_time': sess['session']['endTime']})
 
     if assignmentsCheck:
-        for assignment in get_assignments(session['token'], enrollmentID)['calendarAssignments']:
+        for assignment in apiFunctions.get_assignments(session['token'], enrollmentID)['calendarAssignments']:
             e = Event()
             if assignment['context']['id'] == 1:
                 e.name = assignment['title']
