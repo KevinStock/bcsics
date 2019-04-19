@@ -1,3 +1,6 @@
 __pycache__/
 *.ics
 .idea/
+wsgi.py
+bcsicsenv
+bcsics.sock
