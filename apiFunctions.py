@@ -136,6 +136,7 @@ def create_calendar(token, enrollment_id, options):
                 e.begin = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
                 e.end = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
                 e.make_all_day()
+                e.transparent = True
                 assignment_calendar.events.add(e)
         assignment_file_name = str(enrollment_id) + '-assignment-calendar.ics'
         file_list.append(assignment_file_name)
