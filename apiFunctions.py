@@ -100,6 +100,7 @@ def create_calendar(token, enrollment_id, options):
                 start_time = datetime.strptime(sess['session']['startTime'], '%Y-%m-%dT%H:%M:%SZ')
                 end_time = datetime.strptime(sess['session']['endTime'], '%Y-%m-%dT%H:%M:%SZ')
                 e.name = str(sess['session']['chapter']) + ': ' + sess['session']['name']
+                e.transparent = True if options['academicIsTrans'] else False
                 if options['officeHours']:
                     e.begin = start_time - timedelta(minutes=45)
                     e.end = end_time + timedelta(minutes=30)
@@ -112,6 +113,7 @@ def create_calendar(token, enrollment_id, options):
                 e.name = sess['session']['name']
                 e.begin = sess['session']['startTime']
                 e.end = sess['session']['endTime']
+                e.transparent = True if options['careerIsTrans'] else False
                 career_calendar.events.add(e)
 
         if len(academic_calendar.events) > 0:
@@ -136,7 +138,7 @@ def create_calendar(token, enrollment_id, options):
                 e.begin = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
                 e.end = datetime.strptime(assignment['effectiveDueDate'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(days=1)
                 e.make_all_day()
-                e.transparent = True
+                e.transparent = True if options['assignmentsIsTrans'] else False
                 assignment_calendar.events.add(e)
         assignment_file_name = str(enrollment_id) + '-assignment-calendar.ics'
         file_list.append(assignment_file_name)

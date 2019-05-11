@@ -50,12 +50,18 @@ def calendar():
 
     # POST request
     else:
+        print(request.form)
         enrollment_id = request.form['Course']
         options = {}
         options['academicCal'] = True if (request.form.get('academicCheck')) else False
-        options['careerCal'] = True if (request.form.get('careerCheck')) else False
-        options['assignmentCal'] = True if (request.form.get('assignmentsCheck')) else False
         options['officeHours'] = True if (request.form.get('officeHoursCheck')) else False
+        options['academicIsTrans'] = True if (int(request.form.get('academicIsTrans'))) else False
+        options['careerCal'] = True if (request.form.get('careerCheck')) else False
+        options['careerIsTrans'] = True if (int(request.form.get('careerIsTrans'))) else False
+        options['assignmentCal'] = True if (request.form.get('assignmentsCheck')) else False
+        options['assignmentsIsTrans'] = True if (int(request.form.get('assignmentsIsTrans'))) else False
+        print(options)
+        
     
     calendar_files = apiFunctions.create_calendar(session['token'], enrollment_id, options)
     return render_template('calendar.html', fileList=calendar_files)

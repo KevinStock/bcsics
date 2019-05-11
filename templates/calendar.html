@@ -6,48 +6,121 @@
 <div class="container">
   <div class="row justify-content-md-center">
     <div class="col col-lg-8">
-      <form action="/calendar" method="POST">
+      <form id="calendars" action="/calendar" method="POST">
         <div class="form-group">
           <label for="Course">Course</label>
           <select class="form-control" id="Course" name="Course">
-          {% for enrollment in enrollments %}
+            {% for enrollment in enrollments %}
             <option value="{{ enrollment.id }}">{{ enrollment.name }} - {{ enrollment.startDate }}</option>
-          {% endfor %}
+            {% endfor %}
           </select>
         </div>
-        <div class="form-group">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" name="academicCheck">
-            <label class="form-check-label" for="academicCheck">
-              Academic Calendar
-            </label>
+        
+        <div class="form-group row">
+          <div class="col-sm-4"><h4>Calendar Types</h4></div>
+
+          <div class="col-sm-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" name="academicCheck" id="academicCheck">
+              <label class="form-check-label" for="academicCheck">
+                Academic Calendar
+              </label>
+              <br>
+              <input class="form-check-input" type="checkbox" value="1" name="officeHoursCheck" id="officeHoursCheck">
+              <label class="form-check-label" for="officeHoursCheck">
+                Include Office Hours
+              </label>
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" name="careerCheck">
-            <label class="form-check-label" for="careerCheck">
-              Career Calendar
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" name="assignmentsCheck">
-            <label class="form-check-label" for="assignmentsCheck">
-              Assignments Calendar
-            </label>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <div class="form-check">
+                <div>
+                  <input class="form-check-input" type="radio" value="1" name="academicIsTrans" id="academicIsTransTrue">
+                  <label class="form-check-label" for="academicIsTransTrue">
+                    Show Time as Free
+                  </label>
+                </div>
+                <div>
+                  <input class="form-check-input" type="radio" value="0" name="academicIsTrans" id="academicIsTransFalse" checked>
+                  <label class="form-check-label" for="academicIsTransFalse">
+                    Show Time as Busy
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" name="officeHoursCheck">
-            <label class="form-check-label" for="officeHoursCheck">
-            Include Office Hours
-          </label>
+        
+        <div class="form-group row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" name="careerCheck" id="careerCheck">
+                <label class="form-check-label" for="careerCheck">
+                  Career Calendar
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="form-check">
+                  <div>
+                    <input class="form-check-input" type="radio" value="1" name="careerIsTrans" id="careerIsTransTrue">
+                    <label class="form-check-label" for="careerIsTransTrue">
+                      Show Time as Free
+                    </label>
+                  </div>
+                  <div>
+                    <input class="form-check-input" type="radio" value="0" name="careerIsTrans" id="careerIsTransFalse" checked>
+                    <label class="form-check-label" for="careerIsTransFalse">
+                      Show Time as Busy
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Generate Calendars</button>
+            
+          <div class="form-group row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" name="assignmentsCheck" id="assignmentsCheck">
+                <label class="form-check-label" for="assignmentsCheck">
+                  Career Calendar
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="form-check">
+                  <div>
+                    <input class="form-check-input" type="radio" value="1" name="assignmentsIsTrans" id="assignmentsIsTransTrue" checked>
+                    <label class="form-check-label" for="careerIsTransTrue">
+                      Show Time as Free
+                    </label>
+                  </div>
+                  <div>
+                    <input class="form-check-input" type="radio" value="0" name="assignmentsIsTrans" id="assignmentsIsTransFalse">
+                    <label class="form-check-label" for="assignmentsIsTransFalse">
+                      Show Time as Busy
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row"></div>
+            <div class="col-sm-4 ml-auto mr-auto">  
+              <button type="submit" class="btn btn-primary">Generate Calendars</button>
+            </div>
       </form>
     </div>
   </div>
 </div>
+
 {% else %}
 <div class="container">
   <div class="row justify-content-md-center">
@@ -59,11 +132,13 @@
   </div>
   <div class="row justify-content-md-center">
     <div class="col col-lg-12">
-{% for file in fileList %}
+  {% for file in fileList %}
       <div>
-        <a href='files/{{ file }}'><button type="button" class="btn btn-primary">&#8595; {{ file }}</button></a>
+        <form method="GET" action="files/{{ file }}">
+            <button type="submit" class="btn btn-primary">&#8595; {{ file }}</button>
+        </form>
       </div>
-{% endfor %}
+  {% endfor %}
     </div>
   </div>
 </div>
