@@ -1,7 +1,7 @@
 # BootcampSpot ICS Generator
 
 ## Introduction
-Submission for Trilogy Hack-a-thon using the new Bootcamp Spot API.
+**3rd Place Winning Submission** for Trilogy BCS API Hack-a-thon using the new Bootcamp Spot API.
 
 This application is designed to allow a user to login with their BCS credentials, select a course cohort which they are active in, and generate an ICS file for all Academic, Career, and Assignment calendars. Optionally, a user can enable office hours on the Academic Calendar.
 
