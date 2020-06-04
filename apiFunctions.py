@@ -80,7 +80,7 @@ def get_assignments(token, enrollment_id):
 def get_enrollments(token):
     # get session enrollments
     enrollments = []
-    for enrollment in get_user_detail(token)['enrollments']:
+    for enrollment in get_user_detail(token)['Enrollments']:
         if enrollment['active']:
             enrollments.append({'id': enrollment['id'],
                                 'name': enrollment['course']['name'],
