@@ -79,14 +79,14 @@ def get_assignments(token, enrollment_id):
 
 def get_enrollments(token):
     # get session enrollments
-    enrollments = []
+    user_enrollments = []
     for enrollment in get_user_detail(token)['Enrollments']:
         if enrollment['active']:
-            enrollments.append({'id': enrollment['id'],
+            user_enrollments.append({'id': enrollment['id'],
                                 'name': enrollment['course']['name'],
                                 'startDate': datetime.strptime(enrollment['course']['startDate'],
                                                                '%Y-%m-%dT%H:%M:%SZ').strftime("%B %d, %Y")})
-    return enrollments
+    return user_enrollments
 
 
 def create_calendar(token, enrollment_id, options):
