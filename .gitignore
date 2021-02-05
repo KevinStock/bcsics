@@ -2,6 +2,7 @@ __pycache__/
 *.ics
 .idea/
 wsgi.py
-bcsics-env
+bcsics-env/
+bcsicsenv/
 bcsics.sock
 .nova/
