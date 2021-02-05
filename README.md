@@ -10,12 +10,14 @@ This application is designed to allow a user to login with their BCS credentials
 1. Install dependencies with `pip install -r requirements.txt`
 2. Set SECRET_KEY
 `echo "SECRET_KEY='SuperSecretKey'" >> .env`
+3. Set Sentry DSN
+`echo "SENTRY_DSN='YourSentryDSN" >> .env`
 3. Execute `FLASK_APP=main.py flask run`
 4. Open browser to http://127.0.0.1:5000/
 5. Login with BootcampSpot credentials (user must have an active enrollment to create a calendar file)
 
 ## Dependencies
-Python3, Flask, requests, ics, python-dotenv
+Python3, Flask, requests, ics, python-dotenv, sentry-sdk[flask]
 
 ## Built With
 

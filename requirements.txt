@@ -2,6 +2,7 @@
 Flask
 requests
 python-dotenv
+sentry-sdk[flask]
 
 ###### Requirements with Version Specifiers ######
 ics == 0.7
