@@ -5,7 +5,7 @@ from ics import Calendar, Event
 import os
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.environ.get('SECRET_KEY')
 
 # home page
 @app.route('/')
