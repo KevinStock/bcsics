@@ -9,3 +9,4 @@ TESTING = True
 DEBUG = True
 FLASK_ENV = 'development'
 SECRET_KEY = environ.get('SECRET_KEY')
+SENTRY_DSN = environ.get('SENTRY_DSN')

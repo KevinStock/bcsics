@@ -2,6 +2,14 @@ from flask import Flask, render_template, redirect, url_for, session, request, s
 import apiFunctions
 from datetime import datetime, timedelta
 from ics import Calendar, Event
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+dsn="https://5b6d015212974bde843a7c185e07ea8b@o517234.ingest.sentry.io/5624745",
+integrations=[FlaskIntegration()],
+traces_sample_rate=1.0
+)
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -87,6 +95,10 @@ def is_logged_in():
     if 'token' in session:
         return True
     return False
+
+@app.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
 
 
 if __name__ == '__name__':
