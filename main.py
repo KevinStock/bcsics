@@ -4,9 +4,13 @@ from datetime import datetime, timedelta
 from ics import Calendar, Event
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 sentry_sdk.init(
-dsn="https://5b6d015212974bde843a7c185e07ea8b@o517234.ingest.sentry.io/5624745",
+dsn=os.getenv("SENTRY_DSN"),
 integrations=[FlaskIntegration()],
 traces_sample_rate=1.0
 )
