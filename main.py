@@ -2,10 +2,10 @@ from flask import Flask, render_template, redirect, url_for, session, request, s
 import apiFunctions
 from datetime import datetime, timedelta
 from ics import Calendar, Event
-import os
 
 app = Flask(__name__)
-app.secret_key = os.environ["SECRET_KEY"]
+app.config.from_pyfile('config.py')
+
 
 # home page
 @app.route('/')
