@@ -8,9 +8,11 @@ This application is designed to allow a user to login with their BCS credentials
 ## Getting Started
 ### Run local
 1. Install dependencies with `pip`
-2. Execute `FLASK_APP=main.py flask run`
-3. Open browser to http://127.0.0.1:5000/
-4. Login with BootcampSpot credentials (user must have an active enrollment to create a calendar file)
+2. Set SECRET_KEY environment variable:
+	`export SECRET_KEY="your secret key"`
+3. Execute `FLASK_APP=main.py flask run`
+4. Open browser to http://127.0.0.1:5000/
+5. Login with BootcampSpot credentials (user must have an active enrollment to create a calendar file)
 
 ## Dependencies
 Python3, Flask, requests, ics
