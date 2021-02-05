@@ -6,6 +6,11 @@
 <div class="container">
   <div class="row justify-content-md-center">
     <div class="col col-lg-8">
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% else %}
       <form id="calendars" action="/calendar" method="POST">
         <div class="form-group">
           <label for="Course">Course</label>
@@ -117,6 +122,7 @@
               <button type="submit" class="btn btn-primary">Generate Calendars</button>
             </div>
       </form>
+      {% endif %}
     </div>
   </div>
 </div>

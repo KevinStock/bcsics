@@ -5,7 +5,7 @@ from ics import Calendar, Event
 import os
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY') or 'fMvMODwbtoDHxQGKUTDU'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # home page
 @app.route('/')
@@ -44,13 +44,18 @@ def calendar():
         # check if user is logged in
         if is_logged_in():
             enrollments = apiFunctions.get_enrollments(session['token'])
-            return render_template('calendar.html', enrollments=enrollments)
+            if not enrollments:
+                return render_template('calendar.html',
+                                        enrollments=enrollments,
+                                        error="You do not belong to any courses.")
+            else:
+                return render_template('calendar.html',
+                                        enrollments=enrollments)
         else:
             return redirect(url_for('login'))
 
     # POST request
     else:
-        print(request.form)
         enrollment_id = request.form['Course']
         options = {}
         options['academicCal'] = True if (request.form.get('academicCheck')) else False
@@ -60,8 +65,6 @@ def calendar():
         options['careerIsTrans'] = True if (int(request.form.get('careerIsTrans'))) else False
         options['assignmentCal'] = True if (request.form.get('assignmentsCheck')) else False
         options['assignmentsIsTrans'] = True if (int(request.form.get('assignmentsIsTrans'))) else False
-        print(options)
-        
     
     calendar_files = apiFunctions.create_calendar(session['token'], enrollment_id, options)
     return render_template('calendar.html', fileList=calendar_files)
@@ -87,4 +90,4 @@ def is_logged_in():
 
 
 if __name__ == '__name__':
-    app.run(debug=True, port=3000)
+    app.run(port=3000)
