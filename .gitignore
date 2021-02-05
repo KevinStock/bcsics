@@ -6,3 +6,4 @@ bcsics-env/
 bcsicsenv/
 bcsics.sock
 .nova/
+.env
